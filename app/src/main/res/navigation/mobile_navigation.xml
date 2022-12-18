@@ -13,7 +13,7 @@
 
     <fragment
         android:id="@+id/navigation_dashboard"
-        android:name="com.github.noyeecao2008.f2qr.ui.dashboard.DashboardFragment"
+        android:name="com.github.noyeecao2008.f2qr.ui.registerinfo.RegisterInfoFragment"
         android:label="@string/title_dashboard"
         tools:layout="@layout/fragment_dashboard" />
 
