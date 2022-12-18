@@ -2,10 +2,10 @@ package com.github.noyeecao2008.f2qr.ui.registerinfo;
 
 import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -13,13 +13,21 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.github.noyeecao2008.f2qr.databinding.FragmentRegisterInfoBinding;
-import com.github.noyeecao2008.f2qr.util.ScreenUtil;
+import com.github.noyeecao2008.f2qr.ui.avatar.AvatarCaptureLauncher;
 import com.github.noyeecao2008.f2qr.util.QRCodeUtil;
 
 public class RegisterInfoFragment extends Fragment {
 
     private static final String TAG = RegisterInfoFragment.class.getSimpleName();
     private FragmentRegisterInfoBinding binding;
+
+    private final AvatarCaptureLauncher avartCaputrueLauncher =
+            AvatarCaptureLauncher.createLauncher(this,
+                    faceId -> {
+                        Toast.makeText(RegisterInfoFragment.this.getContext(),
+                                "faceId:" + faceId, Toast.LENGTH_LONG).show();
+                    }
+            );
 
     // Register the launcher and result handler
     private final QRCodeUtil.QRCodeLauncher barcodeLauncher = QRCodeUtil.createLauncher(this,
@@ -43,21 +51,23 @@ public class RegisterInfoFragment extends Fragment {
         binding = FragmentRegisterInfoBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
-        final TextView textView = binding.textQr;
-        dashboardViewModel.getText().observe(getViewLifecycleOwner(), textView::setText);
+        dashboardViewModel.getText().observe(getViewLifecycleOwner(), binding.textQr::setText);
         dashboardViewModel.getQRContent().observe(getViewLifecycleOwner(), content -> {
+            if (TextUtils.isEmpty(content)) {
+                return;
+            }
+
             Bitmap bitmap = QRCodeUtil.stringToBitmap(content);
-            if(bitmap == null){
-                double screenWidth = ScreenUtil.getPhysicsScreenWidth(this.getContext());
-                ViewGroup.LayoutParams lp = this.binding.ivQrcode.getLayoutParams();
-                lp.height = lp.width/2;
-                this.binding.ivQrcode.setLayoutParams(lp);
+            if (bitmap == null) {
                 return;
             }
             this.binding.ivQrcode.setImageBitmap(bitmap);
         });
 
-        textView.setOnClickListener(v -> {
+        binding.linearLayoutAvatar.setOnClickListener(v -> {
+            avartCaputrueLauncher.launch("hello");
+        });
+        binding.linearLayoutQRCode.setOnClickListener(v -> {
             barcodeLauncher.launch();
         });
         return root;

@@ -44,6 +44,12 @@ dependencies {
     // QRCode
     implementation 'com.journeyapps:zxing-android-embedded:4.3.0'
 
+    // 权限请求框架：https://github.com/getActivity/XXPermissions
+    implementation 'com.github.getActivity:XXPermissions:16.5'
+
+    //联网请求
+    implementation project(path: ':net')
+
     // test
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.3'

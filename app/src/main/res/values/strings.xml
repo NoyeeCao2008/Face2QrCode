@@ -3,4 +3,10 @@
     <string name="title_home">Scan</string>
     <string name="title_dashboard">Register Info</string>
     <string name="title_notifications">About</string>
+    <string name="qrcode_tip">this is a qrcode</string>
+    <string name="click_to_scan_your_qrcode">Click to scan your qrcode</string>
+    <string name="click_to_capture_your_avatar">Click to capture your avatar</string>
+    <string name="title_activity_avatar_caputure">AvatarCaputureActivity</string>
+    <string name="dummy_button">Dummy Button</string>
+    <string name="dummy_content">DUMMY\nCONTENT</string>
 </resources>

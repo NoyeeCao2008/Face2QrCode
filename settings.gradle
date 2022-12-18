@@ -10,7 +10,10 @@ dependencyResolutionManagement {
     repositories {
         google()
         mavenCentral()
+        // JitPack 远程仓库：https://jitpack.io
+        maven { url 'https://jitpack.io' }
     }
 }
 rootProject.name = "F2QR"
 include ':app'
+include ':net'
