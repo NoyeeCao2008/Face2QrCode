@@ -1,4 +1,4 @@
-package com.github.noyeecao2008.f2qr.util.qrcode;
+package com.github.noyeecao2008.f2qr.util;
 
 import android.graphics.Bitmap;
 import android.util.Log;
@@ -36,9 +36,7 @@ public class QRCodeUtil {
 
         public void launch() {
             ScanOptions options = new ScanOptions();
-//            options.setDesiredBarcodeFormats(ScanOptions.ONE_D_CODE_TYPES);
             options.setPrompt("Scan a barcode");
-//            options.setCameraId(0);  // Use a specific camera of the device
             options.setBeepEnabled(true);
             options.setBarcodeImageEnabled(true);
             this.barcodeLauncher.launch(options);

@@ -14,7 +14,7 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.github.noyeecao2008.f2qr.databinding.FragmentRegisterInfoBinding;
 import com.github.noyeecao2008.f2qr.util.ScreenUtil;
-import com.github.noyeecao2008.f2qr.util.qrcode.QRCodeUtil;
+import com.github.noyeecao2008.f2qr.util.QRCodeUtil;
 
 public class RegisterInfoFragment extends Fragment {
 
