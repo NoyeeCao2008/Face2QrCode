@@ -10,8 +10,6 @@ public class ScreenUtil {
         WindowManager manager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
         Point point = new Point();
         manager.getDefaultDisplay().getSize(point);
-//        DisplayMetrics dm = context.getResources().getDisplayMetrics();
-        double x = Math.pow(point.x / dm.xdpi, 2);
         return point.x;
     }
 
