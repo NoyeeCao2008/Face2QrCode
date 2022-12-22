@@ -49,6 +49,8 @@ dependencies {
 
     //联网请求
     implementation project(path: ':net')
+    //配置
+    implementation "com.tencent:mmkv:${rootProject.ext.mmkv_version}"
 
     // test
     testImplementation 'junit:junit:4.13.2'

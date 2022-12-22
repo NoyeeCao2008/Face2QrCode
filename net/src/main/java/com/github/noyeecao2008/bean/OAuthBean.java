@@ -9,5 +9,5 @@ public class OAuthBean {
 
     //    expires_in： Access Token的有效期(秒为单位，有效期30天)；
     @SerializedName("expires_in")
-    public String expiresIn;
+    public Long expiresIn;
 }
