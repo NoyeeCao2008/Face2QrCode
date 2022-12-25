@@ -2,23 +2,21 @@ plugins {
     id 'com.android.library'
 }
 
-def localProperties = new Properties()
-localProperties.load(new FileInputStream(rootProject.file("local.properties")))
-
 android {
-    namespace 'com.github.noyeecao2008.net'
+    namespace 'com.github.noyeecao2008.db'
     compileSdk rootProject.ext.compileSdk
 
     defaultConfig {
         minSdk rootProject.ext.minSdk
         targetSdk rootProject.ext.targetSdk
 
+        javaCompileOptions {
+            annotationProcessorOptions {
+                arguments += ["room.schemaLocation": "$projectDir/schemas".toString()]
+            }
+        }
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles "consumer-rules.pro"
-
-        buildConfigField("String", "BaiduAiAppId", "\"" + localProperties['baidu.ai.appid'] + "\"")
-        buildConfigField("String", "BaiduAiAK", "\"" + localProperties['baidu.ai.ak'] + "\"")
-        buildConfigField("String", "BaiduAiSK", "\"" + localProperties['baidu.ai.sk'] + "\"")
     }
 
     buildTypes {
@@ -33,15 +31,24 @@ android {
     }
 }
 
+def room_version = "2.5.0-rc01"
+
 dependencies {
 
     implementation 'androidx.appcompat:appcompat:1.5.1'
     implementation 'com.google.android.material:material:1.7.0'
 
-    implementation 'com.google.code.gson:gson:2.10'
-    implementation 'com.squareup.retrofit2:retrofit:2.9.0'
-    //配置
-    implementation "com.tencent:mmkv:${rootProject.ext.mmkv_version}"
+    // https://developer.android.google.cn/training/data-storage/room
+    // https://developer.android.google.cn/reference/androidx/room/package-summary
+    implementation "androidx.room:room-common:$room_version"
+    implementation "androidx.room:room-runtime:$room_version"
+    annotationProcessor "androidx.room:room-compiler:$room_version"
+
+    implementation "androidx.room:room-guava:$room_version"
+    implementation("com.google.guava:guava:31.1-android")
+
+    // optional - Test helpers
+    testImplementation "androidx.room:room-testing:$room_version"
 
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.4'

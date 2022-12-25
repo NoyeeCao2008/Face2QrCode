@@ -4,12 +4,12 @@ plugins {
 
 android {
     namespace 'com.github.noyeecao2008.f2qr'
-    compileSdk 32
+    compileSdk rootProject.ext.compileSdk
 
     defaultConfig {
         applicationId "com.github.noyeecao2008.f2qr"
-        minSdk 21
-        targetSdk 32
+        minSdk rootProject.ext.minSdk
+        targetSdk rootProject.ext.targetSdk
         versionCode 1
         versionName "1.0"
 
@@ -47,10 +47,14 @@ dependencies {
     // 权限请求框架：https://github.com/getActivity/XXPermissions
     implementation 'com.github.getActivity:XXPermissions:16.5'
 
-    //联网请求
-    implementation project(path: ':net')
-    //配置
+    // 配置
     implementation "com.tencent:mmkv:${rootProject.ext.mmkv_version}"
+
+    // 联网请求
+    implementation project(path: ':net')
+
+    // 数据库
+    implementation project(path: ':db')
 
     // test
     testImplementation 'junit:junit:4.13.2'
