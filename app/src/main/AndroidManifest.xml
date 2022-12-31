@@ -35,12 +35,6 @@
         </activity>
 
         <activity
-            android:name=".ui.avatar.AvatarCaptureActivity"
-            android:exported="false"
-            android:screenOrientation="fullSensor"
-            tools:replace="screenOrientation" />
-
-        <activity
             android:name="com.journeyapps.barcodescanner.CaptureActivity"
             android:exported="true"
             android:screenOrientation="fullSensor"
