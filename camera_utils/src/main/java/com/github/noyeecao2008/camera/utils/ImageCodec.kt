@@ -3,11 +3,12 @@ package com.github.noyeecao2008.camera.utils
 import android.graphics.Bitmap
 import android.text.TextUtils
 import android.graphics.BitmapFactory
+import android.graphics.Matrix
 import android.util.Base64
 import android.util.Log
 import java.io.ByteArrayOutputStream
-import java.io.File
 import java.lang.Exception
+import java.lang.Math.min
 import kotlin.math.max
 
 object ImageCodec {
@@ -85,13 +86,16 @@ object ImageCodec {
 
 
     /** Utility function used to read input file into a byte array */
-    public fun loadThumbJpegBuffer(filePath: String, maxSize: Int): ByteArray? {
-        val inputFile = File(filePath)
+    fun loadThumbJpegBuffer(filePath: String, matrix: Matrix): ByteArray? {
         var bitmapOptions = createScaleBitmapOption();
         BitmapFactory.decodeFile(filePath, bitmapOptions)
         var bitmap: Bitmap =
             BitmapFactory.decodeFile(filePath, updateDecodeBitmapOption(bitmapOptions))
-        return bitmapToJpeg60ByteArray(bitmap)
+        var size = min(bitmap.width, bitmap.height)
+        var fixBitmap = Bitmap.createBitmap(
+            bitmap, 0, 0, size, size, matrix, true
+        )
+        return bitmapToJpeg60ByteArray(fixBitmap)
     }
 
     private val TAG: String = "ImageCodec"

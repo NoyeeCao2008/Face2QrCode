@@ -112,7 +112,6 @@ public class ScanFragment extends Fragment {
         Face2QrDbMan dbMan = new Face2QrDbMan();
         dbMan.openDb(context);
 
-//        userId = "01537e3c9e71e490ba1f4c14d7b7654b";//TODO TEST
         dbMan.findByUserId(userId, (entity, success) -> {
             if (BuildConfig.DEBUG) {
                 Log.i(TAG, "updateQrcodeByFaceId = " + entity);

@@ -56,7 +56,7 @@ class CameraActivityLauncher private constructor(private val avatarLauncher: Act
     }
 
     fun launchForSearch(context: Context) {
-        launch(context, true, false, "")
+        launch(context, false, false, "")
     }
 
     private fun launch(context: Context, facingForward: Boolean, addNewAvatar: Boolean, userId: String) {

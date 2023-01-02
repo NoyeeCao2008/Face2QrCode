@@ -1,5 +1,13 @@
+import java.text.SimpleDateFormat
+
 plugins {
     id 'com.android.application'
+}
+
+def buildTime() {
+    def df = new SimpleDateFormat("dd-MM-yyyy")
+    df.setTimeZone(TimeZone.getTimeZone("UTC+08:00"))
+    return df.format(new Date())
 }
 
 android {
@@ -11,8 +19,8 @@ android {
         minSdk rootProject.ext.minSdk
         targetSdk rootProject.ext.targetSdk
         versionCode 1
-        versionName "1.0"
-
+        versionName "1.0.0"
+        buildConfigField "String", "BUILD_TIME", "\"" + buildTime() + "\""
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 

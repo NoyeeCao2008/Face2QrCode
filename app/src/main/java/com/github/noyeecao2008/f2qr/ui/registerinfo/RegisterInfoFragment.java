@@ -95,9 +95,7 @@ public class RegisterInfoFragment extends Fragment {
                     Face2QrDbMan dbman = new Face2QrDbMan();
                     dbman.openDb(context);
                     dbman.insert(faceInfo.getUserId(), qrcode, faceInfo.getFaceImgB64());
-                    ThreadPool.getInstance().postDelayedToBackground(() -> {
-                        dbman.closeDb();
-                    }, 100);
+                    dbman.closeDb();
                 });
 
             }

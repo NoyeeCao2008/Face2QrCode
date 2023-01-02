@@ -122,12 +122,14 @@ class ImageViewerFragment : Fragment() {
         lifecycleScope.launch(Dispatchers.IO) {
 
             // Load input image file
-            val inputBuffer = ImageCodec.loadThumbJpegBuffer(args.filePath, 256)
+            val inputBuffer = ImageCodec.loadThumbJpegBuffer(args.filePath, bitmapTransformation)
 
             imageBase64 = Base64.encodeToString(inputBuffer, Base64.DEFAULT);
 
-            Log.e(TAG, "inputBuffer.size = " + inputBuffer?.size);
-            Log.e(TAG, "imageBase64.size = " + imageBase64.length);
+            if (BuildConfig.DEBUG) {
+                Log.e(TAG, "inputBuffer.size = " + inputBuffer?.size);
+                Log.e(TAG, "imageBase64.size = " + imageBase64.length);
+            }
 
             if (inputBuffer == null) {
                 return@launch
@@ -173,7 +175,7 @@ class ImageViewerFragment : Fragment() {
 
         // Transform bitmap orientation using provided metadata
         return Bitmap.createBitmap(
-            bitmap, 0, 0, bitmap.width, bitmap.height, bitmapTransformation, true
+            bitmap, 0, 0, bitmap.width, bitmap.height, null, true
         )
     }
 
