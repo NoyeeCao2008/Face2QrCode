@@ -57,6 +57,7 @@ dependencies {
     implementation project(path: ':db')
     implementation project(path: ':camera')
     implementation project(path: ':camera_utils')
+    implementation project(path: ':util')
 
     // test
     testImplementation 'junit:junit:4.13.2'

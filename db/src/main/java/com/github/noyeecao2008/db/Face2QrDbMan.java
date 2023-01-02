@@ -1,7 +1,7 @@
 package com.github.noyeecao2008.db;
 
 import android.content.Context;
-import android.telecom.Call;
+import android.text.TextUtils;
 import android.util.Log;
 
 import androidx.room.Room;
@@ -9,8 +9,6 @@ import androidx.room.Room;
 import com.google.common.util.concurrent.FutureCallback;
 import com.google.common.util.concurrent.Futures;
 import com.google.common.util.concurrent.ListenableFuture;
-
-import java.util.concurrent.CountDownLatch;
 
 public class Face2QrDbMan {
     private static final String TAG = Face2QrDbMan.class.getSimpleName();
@@ -33,22 +31,26 @@ public class Face2QrDbMan {
         return mDb;
     }
 
-    public static interface Callback {
+    public interface Callback {
         void onFinish(Face2QrEntity entity, boolean success);
     }
 
-    public void insert(String faceId, String qrInfo, String avatarBase64) {
-        if (mFace2QrDao == null) {
+    public void insert(String userId, String qrInfo, String avatarBase64) {
+        if (mFace2QrDao == null || TextUtils.isEmpty(userId)) {
+            if (BuildConfig.DEBUG) {
+                Log.e(TAG, "upsert empty userId");
+            }
             return;
         }
-        Face2QrEntity f2qr = new Face2QrEntity(faceId, qrInfo, avatarBase64);
+        Face2QrEntity f2qr = new Face2QrEntity(userId, qrInfo, avatarBase64);
         long begin = System.currentTimeMillis();
         mFace2QrDao.upsert(f2qr);
-        Log.e(TAG, "upsert time = " + (System.currentTimeMillis() - begin));
-
+        if (BuildConfig.DEBUG) {
+            Log.e(TAG, "upsert time = " + (System.currentTimeMillis() - begin));
+        }
     }
 
-    public void findByFaceId(String faceId, Face2QrDbMan.Callback callback) {
+    public void findByUserId(String userId, Face2QrDbMan.Callback callback) {
         if (mFace2QrDao == null) {
             if (callback != null) {
                 callback.onFinish(null, false);
@@ -56,13 +58,15 @@ public class Face2QrDbMan {
             return;
         }
 
-        ListenableFuture<Face2QrEntity> futureFindByFaceId = mFace2QrDao.findByFaceId(faceId);
+        ListenableFuture<Face2QrEntity> futureFindByFaceId = mFace2QrDao.findByUserId(userId);
 
         Futures.addCallback(futureFindByFaceId, new FutureCallback<Face2QrEntity>() {
 
             @Override
             public void onSuccess(Face2QrEntity result) {
-                Log.i(TAG, "findByFaceId(" + faceId + ") = " + result);
+                if (BuildConfig.DEBUG) {
+                    Log.i(TAG, "findByFaceId(" + userId + ") = " + result);
+                }
                 if (callback != null) {
                     callback.onFinish(result, true);
                 }
@@ -70,7 +74,9 @@ public class Face2QrDbMan {
 
             @Override
             public void onFailure(Throwable t) {
-                Log.i(TAG, "findByFaceId failed", t);
+                if (BuildConfig.DEBUG) {
+                    Log.i(TAG, "findByFaceId failed", t);
+                }
                 if (callback != null) {
                     callback.onFinish(null, false);
                 }

@@ -87,7 +87,7 @@ object ImageCodec {
     /** Utility function used to read input file into a byte array */
     public fun loadThumbJpegBuffer(filePath: String, maxSize: Int): ByteArray? {
         val inputFile = File(filePath)
-        var bitmapOptions = creaeteScaleBitmapOption();
+        var bitmapOptions = createScaleBitmapOption();
         BitmapFactory.decodeFile(filePath, bitmapOptions)
         var bitmap: Bitmap =
             BitmapFactory.decodeFile(filePath, updateDecodeBitmapOption(bitmapOptions))
@@ -100,7 +100,7 @@ object ImageCodec {
     private const val DOWNSAMPLE_SIZE: Int = 640  // 1MP
 
 
-    private fun creaeteScaleBitmapOption(): BitmapFactory.Options {
+    private fun createScaleBitmapOption(): BitmapFactory.Options {
         return BitmapFactory.Options().apply {
             inJustDecodeBounds = true
         }

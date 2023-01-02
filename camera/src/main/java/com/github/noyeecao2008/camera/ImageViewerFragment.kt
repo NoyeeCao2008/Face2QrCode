@@ -41,6 +41,7 @@ import com.github.noyeecao2008.camera.utils.ImageCodec
 import com.github.noyeecao2008.util.ThreadPool
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import java.io.File
 
 
 class ImageViewerFragment : Fragment() {
@@ -80,13 +81,18 @@ class ImageViewerFragment : Fragment() {
                     finishAndCanceled("no image")
                 } else {
                     ThreadPool.getInstance().postToBackground {
-                        var faceId = ImageProcessFactory.getProcessor()
-                            .base64ToFaceId(imageBase64, isAddFace())
+                        var faceInfo = if (isAddFace()) {
+                            ImageProcessFactory.getProcessor().addUserId(imageBase64, userId())
+                        } else {
+                            ImageProcessFactory.getProcessor().searchUserId(imageBase64)
+                        }
                         ThreadPool.getInstance().postToMainThread() {
-                            if (TextUtils.isEmpty(faceId)) {
+                            var file = File(args.filePath)
+                            file.delete()
+                            if (faceInfo == null) {
                                 finishAndCanceled(getString(R.string.not_recognize_face))
                             } else {
-                                finishAndSendResult(faceId)
+                                finishAndSendResult(faceInfo)
                             }
                         }
                     }
@@ -96,9 +102,17 @@ class ImageViewerFragment : Fragment() {
     }
 
     private fun isAddFace(): Boolean {
-        var isAdd =
+        var isAddFace =
             findNavController().graph.arguments.get(CameraConfig.CAMERA_ACTION_PARAM_ADD_NEW_AVATAR)
-        return TextUtils.equals(isAdd.toString(), "1")
+        Log.i(TAG, "isAddFace=  ${isAddFace?.defaultValue.toString()}")
+        return TextUtils.equals(isAddFace?.defaultValue.toString(), "1")
+    }
+
+    private fun userId(): String {
+        var userId =
+            findNavController().graph.arguments.get(CameraConfig.CAMERA_ACTION_PARAM_USER_ID)
+        Log.i(TAG, "userId=  ${userId?.defaultValue.toString()}")
+        return userId?.defaultValue.toString();
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -112,7 +126,6 @@ class ImageViewerFragment : Fragment() {
 
             imageBase64 = Base64.encodeToString(inputBuffer, Base64.DEFAULT);
 
-            // TODO post to baidu ai
             Log.e(TAG, "inputBuffer.size = " + inputBuffer?.size);
             Log.e(TAG, "imageBase64.size = " + imageBase64.length);
 
@@ -197,12 +210,18 @@ class ImageViewerFragment : Fragment() {
     }
 
 
-    private fun finishAndSendResult(faceId: String) {
+    private fun finishAndSendResult(faceInfo: ImageProcessFactory.FaceInfo) {
         if (activity?.isFinishing == true) {
             return
         }
         val result = Intent()
-        result.putExtra(CameraConfig.CAMERA_ACTION_RESULT_FACE_ID, faceId)
+        if (faceInfo != null) {
+            result.putExtra(CameraConfig.CAMERA_ACTION_RESULT_FACE_ID, faceInfo.userId)
+            result.putExtra(CameraConfig.CAMERA_ACTION_RESULT_FACE_IMG, faceInfo.faceImgB64)
+            result.putExtra(CameraConfig.CAMERA_ACTION_RESULT_MSG, "")
+        } else {
+            result.putExtra(CameraConfig.CAMERA_ACTION_RESULT_MSG, "null face info")
+        }
         activity?.setResult(AppCompatActivity.RESULT_OK, result)
         activity?.finish()
     }

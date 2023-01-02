@@ -41,10 +41,11 @@ class CameraActivity : AppCompatActivity() {
     }
 
     fun setNavigation() {
-        var camid = intent.getStringExtra(CameraConfig.CAMERA_ACTION_PARAM_CAMERA_ID)
+        var camId = intent.getStringExtra(CameraConfig.CAMERA_ACTION_PARAM_CAMERA_ID)
+        var userId = intent.getStringExtra(CameraConfig.CAMERA_ACTION_PARAM_USER_ID)
         var msg = intent.extras?.get(CameraConfig.CAMERA_ACTION_PARAM_MSG)?.toString()
         var addnew = intent.getStringExtra(CameraConfig.CAMERA_ACTION_PARAM_ADD_NEW_AVATAR)
-        Log.i(TAG, "CameraActivity camid = $camid; msg = $msg; addnew = $addnew");
+        Log.i(TAG, "CameraActivity userId $userId; camid = $camId; msg = $msg; addnew = $addnew");
 
 //        var nav = Navigation.findNavController(this, R.id.fragment_container)
         val navHostFragment = supportFragmentManager
@@ -53,6 +54,7 @@ class CameraActivity : AppCompatActivity() {
 
         var keys = arrayListOf(
             CameraConfig.CAMERA_ACTION_PARAM_CAMERA_ID,
+            CameraConfig.CAMERA_ACTION_PARAM_USER_ID,
             CameraConfig.CAMERA_ACTION_PARAM_MSG,
             CameraConfig.CAMERA_ACTION_PARAM_ADD_NEW_AVATAR
         )

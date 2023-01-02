@@ -37,11 +37,27 @@ public class Face2QrDbManTest {
         String key = "noyee abc";
         mMan.insert(key, "qr code abc", "avatar abc");
         CountDownLatch latchFind = new CountDownLatch(1);
-        mMan.findByFaceId(key, (entity, success) -> {
+        mMan.findByUserId(key, (entity, success) -> {
             Log.e(TAG, "entity = " + entity + "; success" + success);
             assertTrue(success);
             latchFind.countDown();
         });
+        try {
+            latchFind.await();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Test
+    public void testFind(){
+        CountDownLatch latchFind = new CountDownLatch(1);
+        mMan.findByUserId("noyee abc", (entity, success) -> {
+            Log.i(TAG,"entity:"+entity);
+            Log.i(TAG,"success:"+success);
+            latchFind.countDown();
+        });
+
         try {
             latchFind.await();
         } catch (InterruptedException e) {

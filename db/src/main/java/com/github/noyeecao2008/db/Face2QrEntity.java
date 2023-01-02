@@ -1,33 +1,31 @@
 package com.github.noyeecao2008.db;
 
-import androidx.annotation.ColorInt;
+import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.Fts4;
 import androidx.room.Ignore;
+import androidx.room.Index;
 import androidx.room.PrimaryKey;
 
-@Fts4 //通过全文搜索 (FTS) 快速访问数据库信息
+import org.checkerframework.common.aliasing.qual.Unique;
+
 @Entity(tableName = "f2qr")
 public class Face2QrEntity {
 
-    public Face2QrEntity(String faceId, String qrInfo, String avatar) {
-        this.faceId = faceId;
+    public Face2QrEntity(String userId, String qrInfo, String avatar) {
+        this.userId = userId;
         this.qrInfo = qrInfo;
         this.avatar = avatar;
     }
 
     private Face2QrEntity() {
-
     }
 
-    @PrimaryKey(autoGenerate = true)
-    @ColumnInfo(name = "rowid")
-    @Ignore
-    public int rowid = 0;
-
-    @ColumnInfo(name = "face_id")
-    public String faceId;
+    @PrimaryKey
+    @ColumnInfo(name = "user_id")
+    @NonNull
+    public String userId;
 
     @ColumnInfo(name = "qr_info")
     public String qrInfo;
@@ -38,8 +36,7 @@ public class Face2QrEntity {
     @Override
     public String toString() {
         return "Face2QrEntity{" +
-                "rowid=" + rowid +
-                ", faceId='" + faceId + '\'' +
+                "userId='" + userId + '\'' +
                 ", qrInfo='" + qrInfo + '\'' +
                 ", avatar='" + avatar + '\'' +
                 '}';

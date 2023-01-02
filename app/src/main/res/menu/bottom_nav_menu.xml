@@ -4,16 +4,16 @@
     <item
         android:id="@+id/navigation_home"
         android:icon="@drawable/saoma_scan_code"
-        android:title="@string/title_home" />
+        android:title="@string/title_scan" />
 
     <item
         android:id="@+id/navigation_register"
         android:icon="@drawable/shangchuan_upload"
-        android:title="@string/title_dashboard" />
+        android:title="@string/title_register" />
 
     <item
         android:id="@+id/navigation_notifications"
         android:icon="@drawable/sousuo_search"
-        android:title="@string/title_notifications" />
+        android:title="@string/title_about" />
 
 </menu>

@@ -8,6 +8,7 @@ import androidx.activity.result.ActivityResultCaller
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContract
 import android.util.Log;
+import com.github.noyeecao2008.camera.ImageProcessFactory.FaceInfo
 import com.github.noyeecao2008.camera.utils.WhichCamera
 
 
@@ -16,37 +17,49 @@ class CameraActivityLauncher private constructor(private val avatarLauncher: Act
 
     private val TAG: String = CameraActivityLauncher.javaClass.simpleName
 
-    class AvatarContract() : ActivityResultContract<Map<String, String>, String>() {
+    class AvatarContract() : ActivityResultContract<Map<String, String>, FaceInfo>() {
 
         override fun createIntent(context: Context, map: Map<String, String>): Intent {
             val intentScan = Intent(context, CameraActivity::class.java)
             intentScan.setAction(CameraConfig.CAMERA_ACTION)
             intentScan.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
             val cameraId: String? = map.get(CameraConfig.CAMERA_ACTION_PARAM_CAMERA_ID)
+            val userId: String? = map.get(CameraConfig.CAMERA_ACTION_PARAM_USER_ID)
             val message: String? = map.get(CameraConfig.CAMERA_ACTION_PARAM_MSG)
             val addNewAvatar: String? = map.get(CameraConfig.CAMERA_ACTION_PARAM_ADD_NEW_AVATAR)
 
             intentScan.putExtra(CameraConfig.CAMERA_ACTION_PARAM_CAMERA_ID, cameraId)
+            intentScan.putExtra(CameraConfig.CAMERA_ACTION_PARAM_USER_ID, userId)
             intentScan.putExtra(CameraConfig.CAMERA_ACTION_PARAM_MSG, message)
             intentScan.putExtra(CameraConfig.CAMERA_ACTION_PARAM_ADD_NEW_AVATAR, addNewAvatar)
             return intentScan
         }
 
-        override fun parseResult(resultCode: Int, intent: Intent?): String {
-            var faceId =
+        override fun parseResult(resultCode: Int, intent: Intent?): FaceInfo {
+            var userId =
                 intent?.getStringExtra(CameraConfig.CAMERA_ACTION_RESULT_FACE_ID).toString()
+            var faceImg =
+                intent?.getStringExtra(CameraConfig.CAMERA_ACTION_RESULT_FACE_IMG).toString()
             var msg = intent?.getStringExtra(CameraConfig.CAMERA_ACTION_RESULT_MSG).toString()
-            var returnMsg = if (TextUtils.isEmpty(faceId)) {
+            var returnMsg = if (TextUtils.isEmpty(userId)) {
                 msg
             } else {
-                "faceID: $faceId"
+                "userId: $userId"
             }
-            Log.i("CameraResult:","resutl msg $returnMsg");
-            return returnMsg
+            Log.i("CameraResult:", "resutl msg $returnMsg");
+            return FaceInfo(userId,faceImg,msg)
         }
     }
 
-    fun launch(context: Context, facingForward: Boolean, addNewAvatar: Boolean) {
+    fun launchForAdd(context: Context, userId: String) {
+        launch(context, true, true, userId)
+    }
+
+    fun launchForSearch(context: Context) {
+        launch(context, true, false, "")
+    }
+
+    private fun launch(context: Context, facingForward: Boolean, addNewAvatar: Boolean, userId: String) {
         val map = HashMap<String, String>();
 
         val cameraId = if (facingForward) {
@@ -55,6 +68,8 @@ class CameraActivityLauncher private constructor(private val avatarLauncher: Act
             WhichCamera.getBackwordCameraId(context)
         }
         map.put(CameraConfig.CAMERA_ACTION_PARAM_CAMERA_ID, cameraId);
+        map.put(CameraConfig.CAMERA_ACTION_PARAM_USER_ID, userId);
+
 
         val msg = if (addNewAvatar) {
             "Register by face and QRCode."
@@ -82,7 +97,7 @@ class CameraActivityLauncher private constructor(private val avatarLauncher: Act
         @JvmStatic
         fun createLauncher(
             activityResultCaller: ActivityResultCaller,
-            callback: ActivityResultCallback<String>
+            callback: ActivityResultCallback<FaceInfo>
         ): CameraActivityLauncher {
             return CameraActivityLauncher(
                 activityResultCaller.registerForActivityResult(

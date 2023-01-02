@@ -6,58 +6,99 @@
     android:layout_height="match_parent"
     tools:context=".ui.registerinfo.RegisterInfoFragment">
 
-    <LinearLayout
-        android:id="@+id/linearLayoutAvatar"
-        android:layout_width="match_parent"
+    <TextView
+        android:id="@+id/title"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:layout_constraintBottom_toTopOf="@+id/linearLayoutQRCode"
-        app:layout_constraintTop_toTopOf="parent">
+        android:paddingLeft="16dp"
+        android:paddingTop="8dp"
+        android:text="@string/app_name"
+        android:textColor="@color/f2qr_prim"
+        android:textSize="24dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
-        <TextView
-            android:id="@+id/text_avatar"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="16dp"
-            android:text="@string/click_to_capture_your_avatar"
-            android:textAlignment="center"
-            android:textSize="20sp" />
+    <TextView
+        android:id="@+id/subtitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingLeft="16dp"
+        android:paddingTop="4dp"
+        android:text="@string/app_discribe"
+        android:textColor="@color/f2qr_prim"
+        android:textSize="8dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/title" />
 
-        <ImageView
-            android:id="@+id/iv_avatar"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/black"
-            android:minHeight="100dp"
-            tools:layout_height="100dp" />
-    </LinearLayout>
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guidelineTop"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.1"
+        app:layout_constraintHorizontal_chainStyle="spread_inside" />
 
     <LinearLayout
         android:id="@+id/linearLayoutQRCode"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:background="@drawable/bg_qrcode"
+        android:minWidth="200dp"
+        android:minHeight="200dp"
         android:orientation="vertical"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/linearLayoutAvatar">
-
-        <TextView
-            android:id="@+id/text_qr"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="16dp"
-            android:text="@string/click_to_scan_your_qrcode"
-            android:textAlignment="center"
-            android:textSize="20sp" />
+        android:padding="20dp"
+        app:layout_constraintBottom_toTopOf="@+id/iv_avatar_registration"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/guidelineTop">
 
         <ImageView
             android:id="@+id/iv_qrcode"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/black"
-            android:contentDescription="@string/qrcode_tip"
-            android:minHeight="100dp"
-            tools:layout_editor_absoluteX="8dp"
-            tools:layout_editor_absoluteY="549dp"
-            tools:layout_height="100dp" />
+            android:layout_width="160dp"
+            android:layout_height="160dp"
+            android:background="@color/white"
+            android:contentDescription="@string/qrcode_tip" />
     </LinearLayout>
+
+
+    <ImageView
+        android:id="@+id/iv_avatar_registration"
+        android:layout_width="200dp"
+        android:layout_height="200dp"
+        android:background="@drawable/bg_avatar_200dp"
+        android:minWidth="200dp"
+        android:minHeight="200dp"
+        android:padding="4dp"
+        app:layout_constraintBottom_toTopOf="@+id/buttonStart"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/linearLayoutQRCode"
+        app:layout_constraintVertical_bias="0.5" />
+
+    <TextView
+        android:id="@+id/tv_registration"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="@string/tv_registration_caption"
+        android:textSize="12dp"
+        app:layout_constraintEnd_toEndOf="@id/iv_avatar_registration"
+        app:layout_constraintStart_toStartOf="@id/iv_avatar_registration"
+        app:layout_constraintTop_toBottomOf="@id/iv_avatar_registration" />
+
+
+    <TextView
+        android:id="@+id/buttonStart"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="20dp"
+        android:layout_marginBottom="32dp"
+        android:background="@drawable/bg_button"
+        android:gravity="center"
+        android:padding="8dp"
+        android:text="@string/start_to_recognize"
+        android:textColor="@color/white"
+        android:textSize="24dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/iv_avatar_registration" />
 </androidx.constraintlayout.widget.ConstraintLayout>

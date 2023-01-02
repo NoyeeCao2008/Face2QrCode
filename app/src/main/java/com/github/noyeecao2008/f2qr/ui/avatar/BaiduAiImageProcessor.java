@@ -1,6 +1,5 @@
 package com.github.noyeecao2008.f2qr.ui.avatar;
 
-import android.os.Build;
 import android.text.TextUtils;
 import android.util.Log;
 
@@ -16,7 +15,6 @@ import com.github.noyeecao2008.net.Network;
 import com.github.noyeecao2008.net.RequestForFaceAdd;
 import com.github.noyeecao2008.net.RequestForFaceSearch;
 
-import java.io.IOException;
 import java.util.concurrent.CountDownLatch;
 
 import retrofit2.Call;
@@ -27,30 +25,11 @@ public class BaiduAiImageProcessor implements ImageProcessFactory.ImageProcesor 
 
     private static final String TAG = BaiduAiImageProcessor.class.getSimpleName();
 
-    @NonNull
-    @Override
-    public String base64ToFaceId(@NonNull String imageBase64, boolean addFace) {
-        String authToken = BaiduOAuthServer.getAccessToken();
-        if (TextUtils.isEmpty(authToken)) {
-            authToken = loadAuthToken();
-            if (TextUtils.isEmpty(authToken)) {
-                Log.e(TAG, "empty auth token");
-                return "";
-            }
-        }
-        if (BuildConfig.DEBUG) {
-            Log.i(TAG, "authToken = " + authToken);
-        }
-        if (addFace) {
-            return addFace(imageBase64, authToken);
-        } else {
-            return searchFace(imageBase64, authToken);
-        }
-    }
+    private ImageProcessFactory.FaceInfo addFace(String imageBase64, String authToken, String userId) {
+        final String[] faceId = {""};
+        final String[] errMsg = {""};
 
-    private String addFace(String imageBase64, String authToken) {
-        final String[] result = {""};
-        RequestForFaceAdd req = new RequestForFaceAdd("", imageBase64);
+        RequestForFaceAdd req = new RequestForFaceAdd(userId, imageBase64);
         CountDownLatch latch = new CountDownLatch(1);
         Network.getBaiduFaceServer().addFace(req, authToken)
                 .enqueue(
@@ -59,10 +38,10 @@ public class BaiduAiImageProcessor implements ImageProcessFactory.ImageProcesor 
                             public void onResponse(Call<FaceAddResultBean> call, Response<FaceAddResultBean> response) {
                                 FaceAddResultBean.ResultBean bean = response.body().getResult();
                                 if (bean == null) {
-                                    result[0] = "";
+                                    errMsg[0] = "null result";
                                     Log.e(TAG, "addFace.onResponse empty bean");
                                 } else {
-                                    result[0] = bean.getFace_token();
+                                    faceId[0] = userId;
                                     Log.d(TAG, "getFaceToken:" + bean.getFace_token());
                                 }
                                 latch.countDown();
@@ -71,7 +50,7 @@ public class BaiduAiImageProcessor implements ImageProcessFactory.ImageProcesor 
                             @Override
                             public void onFailure(Call<FaceAddResultBean> call, Throwable t) {
                                 latch.countDown();
-                                result[0] = "";
+                                errMsg[0] = "addFace.onFailure";
                                 Log.e(TAG, "addFace.onFailure");
                             }
                         }
@@ -81,11 +60,11 @@ public class BaiduAiImageProcessor implements ImageProcessFactory.ImageProcesor 
         } catch (InterruptedException e) {
             Log.e(TAG, "", e);
         }
-        return result[0];
+        return new ImageProcessFactory.FaceInfo(faceId[0], imageBase64, errMsg[0]);
     }
 
-    private String searchFace(String imageBase64, String authToken) throws IllegalArgumentException {
-        final String[] faceId = {""};
+    private ImageProcessFactory.FaceInfo searchFace(String imageBase64, String authToken) throws IllegalArgumentException {
+        final String[] userId = {""};
         final String[] errMsg = {""};
         CountDownLatch latch = new CountDownLatch(1);
 
@@ -106,13 +85,15 @@ public class BaiduAiImageProcessor implements ImageProcessFactory.ImageProcesor 
                         }
 
                         FaceSearchBean.ResultBean result = bean.getResult();
-                        if (result == null) {
+                        if (result == null || result.getUser_list() == null
+                                || result.getUser_list().size() == 0
+                                || result.getUser_list().get(0) == null) {
                             errMsg[0] = bean.getError_msg();
                             latch.countDown();
                             return;
                         }
 
-                        faceId[0] = result.getFace_token();
+                        userId[0] = result.getUser_list().get(0).getUser_id();
                         latch.countDown();
                     }
 
@@ -128,10 +109,7 @@ public class BaiduAiImageProcessor implements ImageProcessFactory.ImageProcesor 
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        if (!TextUtils.isEmpty(errMsg[0])) {
-            throw new IllegalArgumentException(errMsg[0]);
-        }
-        return faceId[0];
+        return new ImageProcessFactory.FaceInfo(userId[0], imageBase64, errMsg[0]);
     }
 
     private String loadAuthToken() {
@@ -166,5 +144,40 @@ public class BaiduAiImageProcessor implements ImageProcessFactory.ImageProcesor 
             Log.e(TAG, "", e);
         }
         return authTokenResult[0];
+    }
+
+    @NonNull
+    @Override
+    public ImageProcessFactory.FaceInfo searchUserId(@NonNull String imageBase64) {
+        String authToken = BaiduOAuthServer.getAccessToken();
+        if (TextUtils.isEmpty(authToken)) {
+            authToken = loadAuthToken();
+            if (TextUtils.isEmpty(authToken)) {
+                Log.e(TAG, "empty auth token");
+                return new ImageProcessFactory.FaceInfo("", "", "empty auth token");
+            }
+        }
+        if (BuildConfig.DEBUG) {
+            Log.i(TAG, "authToken = " + authToken);
+        }
+
+        return searchFace(imageBase64, authToken);
+    }
+
+    @NonNull
+    @Override
+    public ImageProcessFactory.FaceInfo addUserId(@NonNull String imageBase64, @NonNull String userId) {
+        String authToken = BaiduOAuthServer.getAccessToken();
+        if (TextUtils.isEmpty(authToken)) {
+            authToken = loadAuthToken();
+            if (TextUtils.isEmpty(authToken)) {
+                Log.e(TAG, "empty auth token");
+                return new ImageProcessFactory.FaceInfo("", "", "empty auth token");
+            }
+        }
+        if (BuildConfig.DEBUG) {
+            Log.i(TAG, "authToken = " + authToken);
+        }
+        return addFace(imageBase64, authToken, userId);
     }
 }

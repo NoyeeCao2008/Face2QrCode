@@ -44,6 +44,7 @@ fun computeExifOrientation(rotationDegrees: Int, mirrored: Boolean) = when {
  * @return matrix - Transformation required to properly display [Bitmap]
  */
 fun decodeExifOrientation(exifOrientation: Int): Matrix {
+    Log.e(TAG, "exifOrientation: $exifOrientation")
     val matrix = Matrix()
 
     // Apply transformation corresponding to declared EXIF orientation

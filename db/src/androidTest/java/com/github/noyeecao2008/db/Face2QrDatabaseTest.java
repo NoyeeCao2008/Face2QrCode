@@ -55,27 +55,27 @@ public class Face2QrDatabaseTest {
 
     @Test
     public void testFaceDbInsert() {
-        String key1 = "faceid_noyee";
-        String key2 = "faceid_xxx";
+        String key1 = "userid_noyee";
+        String key2 = "userid_xxx";
         Face2QrEntity f2qr = new Face2QrEntity(key1, "12334", "face12334");
         long begin = System.currentTimeMillis();
         mFace2QrDao.upsert(f2qr);
         Log.e(TAG, "upsert time = " + (System.currentTimeMillis() - begin));
 
-        ListenableFuture<Face2QrEntity> futureFindByFaceId = mFace2QrDao.findByFaceId(key1);
+        ListenableFuture<Face2QrEntity> futurefindByUserId = mFace2QrDao.findByUserId(key1);
         CountDownLatch latchFind = new CountDownLatch(1);
 
-        Futures.addCallback(futureFindByFaceId, new FutureCallback<Face2QrEntity>() {
+        Futures.addCallback(futurefindByUserId, new FutureCallback<Face2QrEntity>() {
 
             @Override
             public void onSuccess(Face2QrEntity result) {
-                Log.e(TAG, "findByFaceId(" + key1 + ") = " + result);
+                Log.e(TAG, "findByUserId(" + key1 + ") = " + result);
                 latchFind.countDown();
             }
 
             @Override
             public void onFailure(Throwable t) {
-                Log.e(TAG, "findByFaceId failed", t);
+                Log.e(TAG, "findByUserId failed", t);
                 latchFind.countDown();
             }
         }, command -> command.run());

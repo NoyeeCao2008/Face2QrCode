@@ -189,10 +189,21 @@ class CameraFragment : Fragment() {
         }
     }
 
+    private fun getUserId(): String {
+        val args = findNavController().graph.arguments;
+        val userId = args[CameraConfig.CAMERA_ACTION_PARAM_USER_ID]?.defaultValue.toString()
+        Log.i(TAG, "getUserId() = $userId;")
+        if (TextUtils.isEmpty(userId)) {
+            return ""
+        }
+        return userId;
+    }
+
     private fun getCameraId(): String {
         val args = findNavController().graph.arguments;
         val cameraId = args[CameraConfig.CAMERA_ACTION_PARAM_CAMERA_ID]?.defaultValue.toString()
-        val addNewStr = args[CameraConfig.CAMERA_ACTION_PARAM_ADD_NEW_AVATAR]?.defaultValue.toString()
+        val addNewStr =
+            args[CameraConfig.CAMERA_ACTION_PARAM_ADD_NEW_AVATAR]?.defaultValue.toString()
         val msg = args[CameraConfig.CAMERA_ACTION_PARAM_MSG]?.defaultValue.toString()
         Log.i(TAG, "getCameraId() = $cameraId; msg = $msg; addNewStr = $addNewStr")
         if (TextUtils.isEmpty(cameraId)) {
