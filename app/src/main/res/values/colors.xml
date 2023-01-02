@@ -14,7 +14,7 @@
     <color name="black_overlay">#66000000</color>
 
     <!-- f2qr -->
-    <color name="f2qr_dark">#FF2254F5</color>
+    <color name="f2qr_dark">#0F2261</color>
     <color name="f2qr_prim">#FF4D80F7</color>
     <color name="f2qr_light">#FFCDDDFA</color>
 </resources>

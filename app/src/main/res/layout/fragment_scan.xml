@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    tools:background="#ffffdd"
     tools:context=".ui.scan.ScanFragment">
 
     <TextView
@@ -49,21 +50,42 @@
         app:layout_constraintTop_toTopOf="@id/guidelineTop"
         tools:layout_editor_absoluteX="106dp">
 
-
-        <ImageView
-            android:id="@+id/iv_avatar_registration"
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cv_avatar_registration"
             android:layout_width="100dp"
             android:layout_height="100dp"
-            android:background="@drawable/bg_avatar_100dp"
-            android:minWidth="100dp"
-            android:minHeight="100dp"
-            android:padding="4dp"
+            app:cardCornerRadius="50dp"
+            app:cardElevation="0dp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@id/iv_avatar_identify"
+            app:layout_constraintEnd_toStartOf="@id/cv_avatar_identify"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.5"
-            tools:layout_height="100dp" />
+            app:layout_constraintVertical_bias="0.5">
+
+            <ImageView
+                android:id="@+id/iv_avatar_registration"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:background="@drawable/bg_avatar_100dp"
+                android:minWidth="100dp"
+                android:minHeight="100dp"
+                android:scaleType="centerCrop"
+                tools:src="@drawable/info" />
+
+        </androidx.cardview.widget.CardView>
+
+        <ImageView
+            android:id="@+id/iv_avatar_registration_frame"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bg_avatar_100dp"
+            android:scaleType="centerCrop"
+            android:translationZ="2dp"
+            app:layout_constraintBottom_toBottomOf="@id/cv_avatar_registration"
+            app:layout_constraintEnd_toEndOf="@id/cv_avatar_registration"
+            app:layout_constraintStart_toStartOf="@id/cv_avatar_registration"
+            app:layout_constraintTop_toTopOf="@id/cv_avatar_registration" />
+
 
         <TextView
             android:id="@+id/tv_registration"
@@ -72,24 +94,43 @@
             android:gravity="center"
             android:text="@string/tv_registration_caption"
             android:textSize="12dp"
-            app:layout_constraintEnd_toEndOf="@id/iv_avatar_registration"
-            app:layout_constraintStart_toStartOf="@id/iv_avatar_registration"
-            app:layout_constraintTop_toBottomOf="@id/iv_avatar_registration" />
+            app:layout_constraintEnd_toEndOf="@id/cv_avatar_registration"
+            app:layout_constraintStart_toStartOf="@id/cv_avatar_registration"
+            app:layout_constraintTop_toBottomOf="@id/cv_avatar_registration" />
 
-        <ImageView
-            android:id="@+id/iv_avatar_identify"
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cv_avatar_identify"
             android:layout_width="100dp"
             android:layout_height="100dp"
-            android:background="@drawable/bg_avatar_100dp"
-            android:minWidth="100dp"
-            android:minHeight="100dp"
-            android:padding="4dp"
+            app:cardCornerRadius="50dp"
+            app:cardElevation="0dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/iv_avatar_registration"
+            app:layout_constraintStart_toEndOf="@+id/cv_avatar_registration"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.5"
-            tools:layout_height="100dp" />
+            app:layout_constraintVertical_bias="0.5">
+
+            <ImageView
+                android:id="@+id/iv_avatar_identify"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:minWidth="100dp"
+                android:minHeight="100dp"
+                android:scaleType="centerCrop"
+                tools:src="@drawable/info" />
+        </androidx.cardview.widget.CardView>
+
+        <ImageView
+            android:id="@+id/iv_avatar_identify_frame"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bg_avatar_100dp"
+            android:scaleType="centerCrop"
+            android:translationZ="2dp"
+            app:layout_constraintBottom_toBottomOf="@id/cv_avatar_identify"
+            app:layout_constraintEnd_toEndOf="@id/cv_avatar_identify"
+            app:layout_constraintStart_toStartOf="@id/cv_avatar_identify"
+            app:layout_constraintTop_toTopOf="@id/cv_avatar_identify" />
 
         <TextView
             android:id="@+id/tv_identify"
@@ -98,9 +139,9 @@
             android:gravity="center"
             android:text="@string/tv_identify_caption"
             android:textSize="12dp"
-            app:layout_constraintEnd_toEndOf="@id/iv_avatar_identify"
-            app:layout_constraintStart_toStartOf="@id/iv_avatar_identify"
-            app:layout_constraintTop_toBottomOf="@id/iv_avatar_identify" />
+            app:layout_constraintEnd_toEndOf="@id/cv_avatar_identify"
+            app:layout_constraintStart_toStartOf="@id/cv_avatar_identify"
+            app:layout_constraintTop_toBottomOf="@id/cv_avatar_identify" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
@@ -133,7 +174,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="20dp"
-        android:layout_marginBottom="32dp"
+        android:layout_marginBottom="80dp"
         android:background="@drawable/bg_button"
         android:gravity="center"
         android:padding="8dp"
@@ -141,6 +182,6 @@
         android:textColor="@color/white"
         android:textSize="24dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/linearLayoutQRCode"
+         />
          />
 </androidx.constraintlayout.widget.ConstraintLayout>
